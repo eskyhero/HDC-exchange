@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="SdProGoods">
+
+    <typeAlias alias="Goods" type="com.ircloud.ydh.sdk4j.model.Goods"/>
+    
+    <resultMap id="BaseResultMap" class="Goods" >
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="marketPrice"      property="marketPrice"     jdbcType="CHAR"/>    
+	    <result column="productUnitName"  property="productUnitName" jdbcType="CHAR"/>
+	    <!--<result column="productTypeId"    property="productTypeId"   jdbcType="CHAR"/>-->
+	    <result column="mulspec1Name"     property="mulspec1Name"    jdbcType="VARCHAR" />
+	    <result column="mulspec1Value"    property="mulspec1Value"   jdbcType="VARCHAR" />
+	    <!--<result column="mulspec2Name"     property="mulspec2Name"    jdbcType="VARCHAR" />-->
+	    <!--<result column="mulspec2Value"    property="mulspec2Value"   jdbcType="VARCHAR" />-->
+	    <result column="property1"    property="property1"   jdbcType="VARCHAR" />
+	    <result column="property2"    property="property2"   jdbcType="VARCHAR" />
+	    <result column="property3"    property="property3"   jdbcType="VARCHAR" />
+	    <result column="property4"    property="property4"   jdbcType="VARCHAR" />
+	    <result column="property5"    property="property5"   jdbcType="VARCHAR" />
+	    <result column="property6"    property="property6"   jdbcType="VARCHAR" />
+	    <result column="property7"    property="property7"   jdbcType="VARCHAR" />
+	    <result column="property8"    property="property8"   jdbcType="VARCHAR" />
+	    <result column="property9"    property="property9"   jdbcType="VARCHAR" />
+	    <result column="property10"    property="property10"   jdbcType="VARCHAR" />
+	    <result column="type"             property="productTypeName" jdbcType="VARCHAR" />   
+    </resultMap>
+    
+    <resultMap id="BaseResultMapIncludeId" class="Goods" >
+        <result column="id"               property="id"              jdbcType="VARCHAR" />
+        <result column="code"             property="code"            jdbcType="VARCHAR" />    
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="marketPrice"      property="marketPrice"     jdbcType="CHAR"/>    
+	    <result column="productUnitName"  property="productUnitName" jdbcType="CHAR"/>
+	    <!-- <result column="mulspec1Name"    property="mulspec1Name"    jdbcType="VARCHAR" /> -->
+	    <!--<result column="mulspec1Value"    property="mulspec1Value"   jdbcType="VARCHAR" />-->
+	    <!--<result column="mulspec2Name"     property="mulspec2Name"    jdbcType="VARCHAR" />-->
+	    <!--<result column="mulspec2Value"    property="mulspec2Value"   jdbcType="VARCHAR" />--> 
+	    <!--<result column="status"           property="status" 		 jdbcType="VARCHAR" />    -->
+	    <result column="property1"    property="property1"   jdbcType="VARCHAR" />
+	    <result column="property2"    property="property2"   jdbcType="VARCHAR" />
+	    <result column="property3"    property="property3"   jdbcType="VARCHAR" />
+	    <result column="property4"    property="property4"   jdbcType="VARCHAR" />
+	    <result column="property5"    property="property5"   jdbcType="VARCHAR" />
+	    <result column="property6"    property="property6"   jdbcType="VARCHAR" />
+	    <result column="property7"    property="property7"   jdbcType="VARCHAR" />
+	    <result column="property8"    property="property8"   jdbcType="VARCHAR" />
+	    <result column="property9"    property="property9"   jdbcType="VARCHAR" />
+	    <result column="property10"    property="property10"   jdbcType="VARCHAR" />
+    </resultMap>
+       
+    <select id="findGoodses" resultMap="BaseResultMap"   >
+		select top 300
+			m.code,
+			m.name,
+			0 as marketPrice,
+			v.unitname as productUnitName,
+			'规格'  as mulspec1Name,
+			m.specs as mulspec1Value,
+			l.name as type
+		from l_goods m 
+		inner join v_goodsunit v on m.goodsid = v.goodsid
+		inner join L_GoodsType l on m.gdtypeid = l.gdtypeid
+		inner join uploadGoodsflag f on m.goodsid = f.spinnerid
+		where m.CLOSED=0 and v.unitname != '' and l.name != '' and f.flag = 0
+		Order By m.code
+    </select>
+    
+    <select id="findReturnedGoodses" resultMap="BaseResultMapIncludeId"   >
+    	select 
+    		 u.ydhspid as id,
+    		 m.code as code,
+    		 m.name as name,
+    		 u.marketPrice as marketPrice,
+    		 v.unitname as productUnitName	 
+    	from l_goods m
+    	inner join v_goodsunit v on m.goodsid = v.goodsid
+    	inner join uploadGoods u on m.code = u.spcode
+		where m.code in(
+			select spcode from uploadGoodsflag where flag = 1
+		)
+    </select>
+    
+    	
+    <insert id="insertReturnedGoods" parameterClass="Goods">
+		insert into uploadGoods(ydhspid, spcode, spname, marketPrice, unitname, ydhstatus)
+		values(#id#, #code#, #name#, #marketPrice#,  #productUnitName#, #status#)
+    </insert>
+    
+    <update id="modifySyncState"  parameterClass="Goods">
+    	update uploadGoodsflag  set flag = 2
+		where spcode = #code#
+
+    </update>
+    
+    <delete id="cleanReturnedGoodses">
+		delete from uploadGoods 
+		where spcode in (
+			select spcode from uploadGoodsflag where flag = 2
+		)      
+    </delete>
+    
+	<update id="modifyExistedStatus"  parameterClass="Goods">
+    	<!-- update t_test_goods  set flag = 2
+		where spbh = #code# -->
+
+    </update>
+
+	<update id="updateGoodsFlag"  parameterClass="java.util.Map">
+    	update t_test_goods  set fmarketprice = #flag#
+		where fcode = #code#
+    </update>
+
+</sqlMap>

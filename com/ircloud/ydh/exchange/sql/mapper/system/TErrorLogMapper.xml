@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="ErrorLog">
+
+    <typeAlias alias="ErrorLog" type="com.ircloud.ydh.sdk4j.model.ErrorLog"/>
+    
+    <resultMap id="BaseResultMap" class="ErrorLog" >
+	   	<result column="fcode"             property="code"            jdbcType="VARCHAR" />
+	    <result column="fname"             property="name"            jdbcType="VARCHAR" />
+	    <result column="ftype"             property="syncType"        jdbcType="VARCHAR" />
+	    <result column="fcontext"          property="context"         jdbcType="VARCHAR" />
+	    <result column="fuserName"         property="userName"        jdbcType="VARCHAR" />
+	    <result column="fcreateTime"       property="createTime"      jdbcType="DATETIME" />
+    </resultMap>
+    
+    <select id="findErrorLogs" resultMap="BaseResultMap" parameterClass="ErrorLog">
+    	select top 1000 fcode,fname,ftype,fcontext,fuserName,fcreateTime from YDH_Exchange.dbo.t_error_log where 1=1 
+    	<isNotNull property="syncType">
+    		and ftype = #syncType#
+    	</isNotNull>
+    	<isNotNull property="code">
+    		and fcode = #code#
+    	</isNotNull>
+    	<isNotNull property="userName">
+    		and fuserName = #userName#
+    	</isNotNull>
+    	ORDER BY fcreatetime DESC 
+    </select>
+    
+    <insert id="insertErrorLog" parameterClass="ErrorLog">
+    	insert into YDH_Exchange.dbo.t_error_log(fcode,fname,ftype,fcontext,fuserName,fcreateTime) 
+    	values(#code#,#name#,#syncType#,#context#,#userName#,#createTime#)
+    </insert>
+    
+    <update id="deleteErrorLog" parameterClass="ErrorLog">
+    	DELETE FROM YDH_Exchange.dbo.t_error_log WHERE fcode = #code#
+    </update>
+    
+</sqlMap>

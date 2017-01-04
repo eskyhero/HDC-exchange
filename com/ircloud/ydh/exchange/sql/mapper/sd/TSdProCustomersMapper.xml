@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="SdProCustomer">
+
+    <typeAlias alias="Customer" type="com.ircloud.ydh.sdk4j.model.Customer"/>
+    
+    <resultMap id="BaseResultMap" class="Customer" >
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="contactor"        property="contactor"       jdbcType="VARCHAR" />
+	    <result column="address"          property="address"     	 jdbcType="VARCHAR"/>    
+	    <result column="phone"    		  property="phone"   		 jdbcType="VARCHAR"/>
+	    <result column="mobile"           property="mobile"   		 jdbcType="VARCHAR"/>
+	    <result column="email"     		  property="email"    		 jdbcType="VARCHAR" /> 
+	    <result column="bank"     		  property="bank"    		 jdbcType="VARCHAR" /> 
+	    <result column="bankName"         property="bankName"     	 jdbcType="VARCHAR" /> 
+	    <result column="bankAccount"      property="bankAccount"     jdbcType="VARCHAR" /> 
+	    <result column="invoice"      	  property="invoice"     	 jdbcType="VARCHAR" />
+	    <result column="taxNum"      	  property="taxNum"    		 jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <resultMap id="BaseResultMapIncludeId" class="Customer" >
+        <result column="id"               property="id"              jdbcType="VARCHAR" />
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="contactor"        property="contactor"       jdbcType="VARCHAR" />
+	    <result column="address"          property="address"     	 jdbcType="VARCHAR"/>    
+	    <result column="phone"    		  property="phone"   		 jdbcType="VARCHAR"/>
+	    <result column="mobile"           property="mobile"   		 jdbcType="VARCHAR"/>
+	    <result column="email"    		  property="email"    		 jdbcType="VARCHAR" />
+	    <result column="bank"     		  property="bank"    		 jdbcType="VARCHAR" /> 
+	    <result column="bankName"         property="bankName"     	 jdbcType="VARCHAR" /> 
+	    <result column="bankAccount"      property="bankAccount"     jdbcType="VARCHAR" /> 
+	    <result column="invoice"      	  property="invoice"     	 jdbcType="VARCHAR" />
+	    <result column="taxNum"      	  property="taxNum"    		 jdbcType="VARCHAR" />
+    </resultMap>
+       
+    <resultMap id="existedCustomerMap" class="Customer" >
+        <result column="id"               property="id"              jdbcType="VARCHAR" />
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <select id="findExistedCustomers" resultMap="existedCustomerMap">
+    	select ydhcustid as id,custcode as code,custname as name from uploadCust 
+    	where custcode in (
+    		select custcode from uploadCust group by custcode having count(custcode) > 1)
+    </select>
+       
+    <select id="findNewCustomers" resultMap="BaseResultMap" >
+        select 
+			m.code as code,
+			m.fullname as name,
+			m.contactor as contactor,
+			m.address as address,
+			m.tel1 as phone,
+			m.phone as mobile,
+			m.email as email,
+			m.bank as bank,
+			m.fullname as bankName,
+			m.bankaccno as bankAccount,
+			m.fullname as invoice,
+			m.taxno as taxNum
+		from  l_trader m
+		inner join uploadCustflag f on m.traderid = f.custid
+		where m.traderid > 0  and m.isclient = 1 And m.CLOSED=0 and f.flag = 0
+		order By m.code
+    </select>
+
+    <insert id="insertReturnedCustomer" parameterClass="Customer">
+        insert into uploadCust(ydhcustid, custcode, custname, ydhstatus)
+		values(#id#, #code#, #name#, #userStatus#)
+    </insert>
+    
+    <select id="findModifiedCustomer" resultMap="BaseResultMapIncludeId" >
+         select 
+			u.ydhcustid as id,
+			m.code as code,
+			m.fullname as name,
+			m.contactor as contactor,
+			m.address as address,
+			m.tel1 as phone,
+			m.phone as mobile,
+			m.email as email,
+			m.bank as bank,
+			m.fullname as bankName,
+			m.bankaccno as bankAccount,
+			m.fullname as invoice,
+			m.taxno as taxNum
+    	from l_trader m
+    	inner join uploadCust u on m.code = u.custcode
+		where m.code in(
+			select custcode from uploadCustflag where flag = 1
+		)
+    </select>
+    
+    <update id="updateCustomerFlag"  parameterClass="java.util.Map">
+    	update t_test_goods  set fmarketprice = #flag#
+		where fcode = #code#
+    </update>
+    
+    <update id="cleanReturnedCustomers">
+        delete from uploadCust 
+		where custcode in (
+			select custcode from uploadCustflag where flag = 2
+		)  
+    </update>
+    
+    <update id="modifySyncState"  parameterClass="Customer">
+    	update uploadCustflag set flag = 2 where custcode = #code#
+    </update>
+
+
+	<update id="modifyExistedStatus"  parameterClass="Customer">
+    	update t_returned_customer
+		set code1 = code1
+    </update>
+
+</sqlMap>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="TestGoods">
+
+    <typeAlias alias="Goods" type="com.ircloud.ydh.sdk4j.model.Goods"/>
+    
+    <resultMap id="BaseResultMap" class="Goods" >
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	   	<result column="barcode"          property="barcode"         jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="marketPrice"      property="marketPrice"     jdbcType="CHAR"/>    
+	    <result column="productUnitName"    property="productUnitName"   jdbcType="CHAR"/>
+	    <!--<result column="productTypeId"    property="productTypeId"   jdbcType="CHAR"/>-->
+	    <result column="mulspec1Name"     property="mulspec1Name"    jdbcType="VARCHAR" />
+	    <result column="mulspec1Value"    property="mulspec1Value"   jdbcType="VARCHAR" />
+	    <!--<result column="mulspec2Name"     property="mulspec2Name"    jdbcType="VARCHAR" />-->
+	    <!--<result column="mulspec2Value"    property="mulspec2Value"   jdbcType="VARCHAR" />-->
+	    <result column="property1"    property="property1"   jdbcType="VARCHAR" />
+	    <result column="property2"    property="property2"   jdbcType="VARCHAR" />
+	    <result column="property3"    property="property3"   jdbcType="VARCHAR" />
+	    <result column="property4"    property="property4"   jdbcType="VARCHAR" />
+	    <result column="property5"    property="property5"   jdbcType="VARCHAR" />
+	    <result column="property6"    property="property6"   jdbcType="VARCHAR" />
+	    <result column="property7"    property="property7"   jdbcType="VARCHAR" />
+	    <result column="property8"    property="property8"   jdbcType="VARCHAR" />
+	    <result column="property9"    property="property9"   jdbcType="VARCHAR" />
+	    <result column="property10"   property="property10"   jdbcType="VARCHAR" />
+	    <result column="type"         property="productTypeName" jdbcType="VARCHAR" />  
+    </resultMap>
+    
+    <resultMap id="BaseResultMapIncludeId" class="Goods" >
+        <result column="id"               property="id"              jdbcType="VARCHAR" />
+        <result column="code"             property="code"            jdbcType="VARCHAR" />
+        <result column="barcode"          property="barcode"         jdbcType="VARCHAR" />    
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="marketPrice"      property="marketPrice"     jdbcType="CHAR"/>    
+	    <result column="productUnitName"    property="productUnitName"   jdbcType="CHAR"/>
+	    <!--<result column="productTypeId"    property="productTypeId"   jdbcType="CHAR"/>-->
+	    <result column="mulspec1Name"     property="mulspec1Name"    jdbcType="VARCHAR" />
+	    <result column="mulspec1Value"    property="mulspec1Value"   jdbcType="VARCHAR" />
+        <result column="property1"    property="property1"   jdbcType="VARCHAR" />
+	    <result column="property2"    property="property2"   jdbcType="VARCHAR" />
+	    <result column="property3"    property="property3"   jdbcType="VARCHAR" />
+	    <result column="property4"    property="property4"   jdbcType="VARCHAR" />
+	    <result column="property5"    property="property5"   jdbcType="VARCHAR" />
+	    <result column="property6"    property="property6"   jdbcType="VARCHAR" />
+	    <result column="property7"    property="property7"   jdbcType="VARCHAR" />
+	    <result column="property8"    property="property8"   jdbcType="VARCHAR" />
+	    <result column="property9"    property="property9"   jdbcType="VARCHAR" />
+	    <result column="property10"    property="property10"   jdbcType="VARCHAR" />
+	     <!--<result column="mulspec2Name"     property="mulspec2Name"    jdbcType="VARCHAR" />-->
+	     <!--<result column="mulspec2Value"    property="mulspec2Value"   jdbcType="VARCHAR" />-->    
+    </resultMap>
+       
+    <select id="findGoodses" resultMap="BaseResultMap">
+        select 
+			fcode as code, "111" as barcode, fname as name, fmarketPrice as marketPrice, fproductUnitName as productUnitName, 
+			fmulspec1Name as mulspec1Name, fmulspec1Value as mulspec1Value,fproperty1 as property1,fproperty2 as property2,
+			fproperty3 as property3,fproperty4 as property4,fproperty5 as property5,fproperty6 as property6,fproperty7 as property7,
+			fproperty8 as property8,fproperty9 as property9,fproperty10 as property10,ftype as type
+		from
+			t_test_goods 
+    </select>
+    
+    <select id="findReturnedGoodses" resultMap="BaseResultMapIncludeId">
+    	<!-- select 
+			id, code, barcode, name, marketPrice, productUnitName, 
+			mulspec1Name, mulspec1Value
+		from uploadGoods
+		where barcode in(
+			select spid from uploadGoodsflag where flag = 1
+		) -->
+		select 
+			fid as id, fcode as code, "111" as barcode, fname as name, fmarketPrice as marketPrice, fproductUnitName as productUnitName, 
+			fmulspec1Name as mulspec1Name, fmulspec1Value as mulspec1Value
+		from
+			t_test_goods where ftype = "药品"
+    </select>
+    	
+    <insert id="insertReturnedGoods" parameterClass="Goods">
+    	INSERT INTO t_test_goods(fname,fcode,fmarketprice,fproductUnitName,fmulspec1Name,fmulspec1Value,ftype) 
+    	VALUES (#name#,#code#,#marketPrice#,#productUnitName#,#mulspec1Name#,#mulspec1Value#,#productTypeName#)
+    </insert>
+    
+    <update id="modifySyncState"  parameterClass="Goods">
+    	<!-- update t_test_goods  set flag = 2
+		where spbh = #code# -->
+
+    </update>
+    
+	<update id="modifyExistedStatus"  parameterClass="Goods">
+    	<!-- update t_test_goods  set flag = 2
+		where spbh = #code# -->
+
+    </update>
+    
+    <update id="updateGoodsFlag"  parameterClass="java.util.Map">
+    	update t_test_goods  set fmarketprice = #flag#
+		where fcode = #code#
+    </update>
+
+	<delete id="cleanReturnedGoodses">
+		update t_test_goods  set fmarketprice = 1 where fcode = '1000'     
+    </delete>
+
+    
+    <!-- 多规格校验预处理存储过程 -->
+    <procedure id="excuteProcedure" >
+	    CALL testPro
+	</procedure>
+    
+	
+</sqlMap>

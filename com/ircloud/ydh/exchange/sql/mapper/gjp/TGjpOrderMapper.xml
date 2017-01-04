@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="GjpSaleBill">
+    <typeAlias alias="Order" type="com.ircloud.ydh.sdk4j.model.Order"/>
+    <typeAlias alias="OrderDetail" type="com.ircloud.ydh.sdk4j.model.OrderDetail"/>
+
+    <sql id="Base_Columns">
+		[Date],
+		number,   
+		VchType,   
+		summary,   
+		Comment,   
+		btypeid,   
+		etypeid,   
+		ktypeid,   
+		ktypeid2,   
+		ifcheck,   
+		checke,   
+		period,   
+		accounte,   
+		inputno,   
+		draft,   
+		DefDiscount,   
+		redword,   
+		ToDate,   
+		Total,   
+		YearPeriod  
+    </sql>
+    
+    <sql id="Detail_Base_Columns">
+		vchcode, 
+		ColRowNo, 
+		atypeId, 
+		btypeId, 
+		etypeId, 
+		ktypeId, 
+		ktypeId2, 
+		PtypeId, 
+		Qty, 
+		SideQty, 
+		discount, 
+		discountprice, 
+		costtotal, 
+		costPrice, 
+		blockno, 
+		goodsno, 
+		price, 
+		total, 
+		Prodate, 
+		TaxPrice, 
+		TaxTotal, 
+		comment, 
+		[date], 
+		usedtype, 
+		period, 
+		tax_total, 
+		tax, 
+		discounttotal, 
+		AssQty, 
+		AssPrice, 
+		AssDiscountPrice, 
+		AssTaxPrice, 
+		UnitRate, 
+		costmode, 
+		vchtype, 
+		redword, 
+		unit, 
+		Pstutas, 
+		YearPeriod, 
+		pgholqty, 
+		pgholInqty
+    </sql>
+
+    <insert id="saveOrder" parameterClass="Order">
+		insert into DlyNdxOrder(<include refid="Base_Columns"/>)
+        select
+        	CONVERT(char,#createTime#,23),
+			#orderNum#,
+			8,
+			'',
+			'',
+			(select btypeid from btype where busercode = #customer.code#),
+			'00000',
+			'00001',
+			'',
+			'',
+			'',
+			0,
+			'',
+			'00000',
+			0,
+			0,
+			'F',
+			CONVERT(char,#deliveryDate#,23),
+			#money#,
+			1
+    </insert>
+
+    <insert id="saveOrderDetail" parameterClass="OrderDetail">
+     	insert into bakdlyorder(<include refid="Detail_Base_Columns"/>)
+        select
+        	(select Vchcode from DlyNdxOrder where Number = #orderNum#),
+			isnull((select max(ColRowNo)+1 from bakdlyorder where Vchcode = (select Vchcode from DlyNdxOrder where number = #orderNum#)),1),
+			'0000100001',
+			(select btypeid from btype where busercode = #customer.code#),
+			'00000',
+			'00001',
+			'',
+			(select ptypeid  from ptype where pusercode =  #productCode#),
+			#count#,
+			0,
+			1,
+			#price#,
+			0,
+			0,
+			'',
+			'0',
+			#price#,
+			#price#*#count#,
+			'',
+			#price#,
+			0,
+			'',
+			CONVERT(char,getdate(),23),
+			1,
+			0,
+			#money#,
+			0.17,
+			#money#,
+			#count#,
+			#price#,
+			#price#,
+			#price#,
+			1,
+			0,
+			8,
+			'F',
+			(select ordid from xw_PtypeUnit where ptypeid = (select ptypeid  from ptype where pusercode =  #productCode#)),
+			0,
+			1,
+			0,
+			0
+       
+    </insert>
+    
+    
+    <!-- 保存退货单 -->
+ 	<insert id="saveReturnOrder" parameterClass="Order">
+ 	
+ 	</insert>
+ 	
+    <insert id="saveReturnOrderDetail" parameterClass="OrderDetail">
+          
+    </insert>
+    
+    <!-- 删除订货单 -->
+    <update id="deleteOrders" parameterClass="java.util.List">
+      DELETE FROM DlyNdxOrder WHERE Number in
+      <iterate conjunction="," open="(" close=")">
+         #list[].orderNum#
+      </iterate>
+    </update>
+    
+    <update id="deleteOrderDetails" parameterClass="java.util.List">
+      DELETE FROM bakdlyorder WHERE Vchcode in (select Vchcode from DlyNdxOrder where Number in
+	      <iterate conjunction="," open="(" close=")">
+	         #list[].orderNum#	         
+	      </iterate>
+	  )
+    </update>
+    <!-- 删除退货单 -->
+	<update id="deleteReturnOrders" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill WHERE FORDERNUM in
+      <iterate conjunction="," open="(" close=")">
+         #list[].orderNum#
+      </iterate>
+    </update>   
+    
+    <update id="deleteReturnOrderDetails" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill_detail WHERE FID in (select FID from t_sale_bill where FORDERNUM in
+	      <iterate conjunction="," open="(" close=")">
+	         #list[].orderNum#	         
+	      </iterate>
+	  )
+    </update>
+    
+    
+    <!-- 插入订单前执行存储过程 -->
+	<procedure id="excuteProcedureBeforeInsert" parameterClass="Order">
+	    CALL insertParameter(#orderNum#)
+	</procedure>
+	
+    <!-- 执行存储过程 -->
+	<procedure id="excuteProcedure" parameterClass="Order">
+	    CALL insertParameter(#orderNum#)
+	</procedure>
+    
+    
+    
+    <resultMap id="findAllCancelOrder" class="Order">  
+      <result property="orderNum" column="orderNum" javaType="java.lang.String" />  
+    </resultMap>
+    
+    <select id="findAllCancelOrder" parameterClass="int" resultMap="findAllCancelOrder">
+       
+    </select>
+    
+    
+</sqlMap>

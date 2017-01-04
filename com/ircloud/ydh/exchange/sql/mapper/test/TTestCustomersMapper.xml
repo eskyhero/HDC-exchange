@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="TestCustomer">
+
+    <typeAlias alias="Customer" type="com.ircloud.ydh.sdk4j.model.Customer"/>
+    
+    <resultMap id="BaseResultMap" class="Customer" >
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="contactor"        property="contactor"            jdbcType="VARCHAR" />
+	    <result column="address"          property="address"     jdbcType="VARCHAR"/>    
+	    <result column="phone"    property="phone"   jdbcType="VARCHAR"/>
+	    <result column="mobile"            property="mobile"   		 jdbcType="VARCHAR"/>
+	    <result column="email"     property="email"    jdbcType="VARCHAR" /> 
+    </resultMap>
+    
+    <resultMap id="BaseResultMapIncludeId" class="Customer" >
+        <result column="id"               property="id"              jdbcType="VARCHAR" />
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+	    <result column="contactor"        property="contactor"            jdbcType="VARCHAR" />
+	    <result column="address"          property="address"     jdbcType="VARCHAR"/>    
+	    <result column="phone"    property="phone"   jdbcType="VARCHAR"/>
+	    <result column="mobile"            property="mobile"   		 jdbcType="VARCHAR"/>
+	    <result column="email"     property="email"    jdbcType="VARCHAR" />
+    </resultMap>
+     
+    <resultMap id="existedCustomerMap" class="Customer" >
+        <result column="id"               property="id"              jdbcType="VARCHAR" />
+	   	<result column="code"             property="code"            jdbcType="VARCHAR" />
+	    <result column="name"             property="name"            jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <select id="findExistedCustomers" resultMap="existedCustomerMap">
+    	select custid as id,custcode as code,custname as name from uploadCust 
+    	where custcode in (
+    	select custcode from uploadCust 
+    	group by custcode having count(custcode) > 1)
+    </select>
+       
+    <select id="findNewCustomers" resultMap="BaseResultMap">
+        select code1 as code,name1 as name,phone as phone,phone as mobile,email as email,address as address,contactor as contactor from t_test_customer 
+    </select>
+
+    <insert id="insertReturnedCustomer" parameterClass="Customer">
+        insert into t_returned_customer(customerId,code1,name1,phone,email,address,status,contactor)VALUES(#id#,#code#,#name#,#phone#,#email#,#address#,1,#contactor#)
+    </insert>
+    
+    <select id="findModifiedCustomer" resultMap="BaseResultMapIncludeId">
+        select customerId as id,code1 as code,name1 as name,phone as phone,email as email,address as address,contactor as contactor from t_returned_customer where statu1s = 2
+    </select>
+
+	<update id="updateCustomerFlag"  parameterClass="java.util.Map">
+    	update t_test_goods  set fmarketprice = #flag#
+		where fcode = #code#
+    </update>
+
+	<update id="modifySyncState"  parameterClass="Customer">
+    	update t_returned_customer
+		set code1 = code1
+    </update>
+    
+    
+    <update id="modifyExistedStatus"  parameterClass="Customer">
+    	update t_returned_customer
+		set code1 = code1
+    </update>
+    
+    
+</sqlMap>

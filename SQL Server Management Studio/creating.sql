@@ -1,0 +1,422 @@
+      INSERT INTO [T_SAL_DELIVERYNOTICE]
+           ([FID]
+           ,[FBILLTYPEID]
+           ,[FBILLNO]
+           ,[FDATE]
+           ,[FCUSTOMERID]
+           ,[FDELIVERYORGID]
+           ,[FDELIVERYDEPTID]
+           ,[FSTOCKERGROUPID]
+           ,[FSTOCKERID]
+           ,[FRECEIVERID]
+           ,[FSETTLEID]
+           ,[FPAYERID]
+           ,[FDELIVERYNO]
+           ,[FTAKEDELIVERYNO]
+           ,[FCARRIAGENO]
+           ,[FCARRIERID]
+           ,[FSALEORGID]
+           ,[FSALEGROUPID]
+           ,[FSALEDEPTID]
+           ,[FSALESMANID]
+           ,[FNOTE]
+           ,[FDOCUMENTSTATUS]
+           ,[FCANCELSTATUS]
+           ,[FCREATORID]
+           ,[FCREATEDATE]
+           ,[FMODIFIERID]
+           ,[FMODIFYDATE]
+           ,[FAPPROVERID]
+           ,[FAPPROVEDATE]
+           ,[FCANCELLERID]
+           ,[FCANCELDATE]
+           ,[FOWNERTYPEID]
+           ,[FOWNERID]
+           ,[FCLOSERID]
+           ,[FCLOSEDATE]
+           ,[FCLOSESTATUS]
+           ,[FRECEIPTCONDITIONID]
+           ,[FHEADLOCID]
+           ,[FHEADLOCADDRESS]
+           ,[FHEADDELIVERYWAY]
+           ,[FISSYSCLOSE]
+           ,[FBUSINESSTYPE]
+           ,[FRECEIVEADDRESS]
+           ,[FCREDITCHECKRESULT]
+           ,[FOBJECTTYPEID]
+           ,[FCORRESPONDORGID]
+           ,[FRECCONTACTID])
+     VALUES
+            (1100013
+,'193822715afc48aa9fa6d6beca7700ab'
+,'DH15011611004659 '
+,'2016-11-1'
+,116856
+,104772
+,0
+,0
+,0
+,116856
+,116856
+,116856
+,''
+,''
+,''
+,0
+,104772
+,109047
+,104795
+,109458
+,'10000信合'
+,'A'
+,'A'
+,141240
+,'2016-11-18'
+,141240
+,'2016-11-18'
+,0
+,NULL
+,0
+,NULL
+,'BD_OwnerOrg'
+,0
+,0
+,NULL
+,'A'
+,0
+,0
+,''
+,''
+,0
+,'NORMAL'
+,'安宁金牛街海龙数码广场VIVO专卖店（张炜炜）'
+,0
+,'SAL_DELIVERYNOTICE'
+,0
+,0)
+
+INSERT INTO [T_SAL_DELIVERYNOTICEENTRY]
+           ([FENTRYID]
+           ,[FID]
+           ,[FSEQ]
+           ,[FCUSTMATID]
+           ,[FMATERIALID]
+           ,[FAUXPROPID]
+           ,[FUNITID]
+           ,[FQTY]
+           ,[FSHIPMENTSTOCKID]
+           ,[FSHIPMENTSTOCKLOCID]
+           ,[FDELIVERYLOC]
+           ,[FDELIVERYADDRESS]
+           ,[FDELIVERYDATE]
+           ,[FDELIVERYTYPE]
+           ,[FPLANDELIVERYDATE]
+           ,[FCARRYLEADTIME]
+           ,[FBOMID]
+           ,[FLOT]
+           ,[FLOT_TEXT]
+           ,[FBASEUNITID]
+           ,[FBASEUNITQTY]
+           ,[FGROSSWEIGHT]
+           ,[FNETWEIGHT]
+           ,[FOUTCONTROL]
+           ,[FOUTMAXQTY]
+           ,[FOUTMINQTY]
+           ,[FSRCTYPE]
+           ,[FSRCBILLNO]
+           ,[FSRCROWID]
+           ,[FNOTE]
+           ,[FJOINOUTQTY]
+           ,[FBASEJOINOUTQTY]
+           ,[FSUMOUTQTY]
+           ,[FBASESUMRETNOTICEQTY]
+           ,[FORDERNO]
+           ,[FORDERSEQ]
+           ,[FBACKUPSTOCKID]
+           ,[FBACKUPSTOCKLOCID]
+           ,[FTRANSFERQTY]
+           ,[FBASETRANSFERQTY]
+           ,[FBASEACTUALQTY]
+           ,[FBASESUMOUTQTY]
+           ,[FPRODUCEDATE]
+           ,[FEXPUNIT]
+           ,[FEXPPERIOD]
+           ,[FEXPIRYDATE]
+           ,[FREMAINOUTQTY]
+           ,[FCLOSESTATUS]
+           ,[FSTOCKSTATUSID]
+           ,[FBASEOUTMAXQTY]
+           ,[FBASEOUTMINQTY]
+           ,[FBFLOWID]
+           ,[FMTONO])
+     VALUES
+            (1878852
+,1100013
+,1
+,''
+,152941
+,100011
+,106017
+,5
+,141093
+,0
+,104508
+,'安宁金牛街海龙数码广场VIVO专卖店（张炜炜）'
+,'2016-11-1'
+,''
+,'2016-11-1'
+,0
+,0
+,0
+,''
+,106017
+,5
+,0
+,0
+,0
+,5
+,5
+,''
+,''
+,0
+,''
+,0
+,0
+,0
+,0
+,''
+,''
+,0
+,0
+,0
+,0
+,0
+,0
+,NULL
+,''
+,0.000000
+,NULL
+,5
+,'A'
+,0
+,5
+,5
+,''
+,'')
+
+INSERT INTO [T_SAL_DELIVERYNOTICEENTRY_E]
+           ([FENTRYID]
+           ,[FID]
+           ,[FTERMINATERID]
+           ,[FTERMINATEDATE]
+           ,[FTERMINATIONSTATUS]
+           ,[FOWNERTYPEID]
+           ,[FOWNERID]
+           ,[FQUALIFIEDQTY]
+           ,[FBASEQUALIFIEDQTY]
+           ,[FUNQUALIFIEDQTY]
+           ,[FBASEUNQUALIFIEDQTY]
+           ,[FJUNKEDQTY]
+           ,[FBASEJUNKEDQTY]
+           ,[FSTOCKUNITID]
+           ,[FSTOCKQTY]
+           ,[FSTOCKBASEQTY]
+           ,[FSTOCKBASEJOINOUTQTY]
+           ,[FSTOCKBASESUMOUTQTY]
+           ,[FSTOCKBASETRANSQTY]
+           ,[FBASEJOINQUALIFIEDQTY]
+           ,[FJOINQUALIFIEDQTY]
+           ,[FBASEJOINUNQUALIFIEDQTY]
+           ,[FJOINUNQUALIFIEDQTY]
+           ,[FBASEUQCANSALEQTY]
+           ,[FUQCANSALEQTY]
+           ,[FBASEJOINCHECKQTY]
+           ,[FJOINCHECKQTY]
+           ,[FJOINDELICHKQTY]
+           ,[FBASEJOINDELICHKQTY]
+           ,[FJOINDELICHKUQQTY]
+           ,[FBASEJOINDELICHKUQQTY]
+           ,[FDELICHKTRANOUTQTY]
+           ,[FBASEDELICHKTRANOUTQTY]
+           ,[FDELICHKTRANOUTUQQTY]
+           ,[FBASEDELICHKTRANOUTUQQTY]
+           ,[FOUTLMTUNIT]
+           ,[FOUTLMTUNITID]
+           ,[FSOENTRYID]
+           ,[FTRANSRETURNQTY]
+           ,[FTRANSRETURNBASEQTY]
+           ,[FCONSIGNSETTQTY]
+           ,[FCONSIGNSETTBASEQTY])
+     VALUES
+           (1878851
+,1100012
+,0
+,NULL
+,'A'
+,'BD_OwnerOrg'
+,104772
+,0
+,0
+,0
+,0
+,0
+,0
+,106017
+,5
+,5
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,'SAL'
+,106017
+,0
+,0
+,0
+,0
+,0)
+
+
+INSERT INTO [T_SAL_DELIVERYNOTICEENTRY_F]
+           ([FENTRYID]
+           ,[FID]
+           ,[FPRICEUNITID]
+           ,[FPRICEUNITQTY]
+           ,[FPRICE]
+           ,[FTAXPRICE]
+           ,[FTAXRATE]
+           ,[FPRICECOEFFICIENT]
+           ,[FSYSPRICE]
+           ,[FLIMITDOWNPRICE]
+           ,[FUPPRICE]
+           ,[FDOWNPRICE]
+           ,[FBEFDISAMT]
+           ,[FBEFDISALLAMT]
+           ,[FDISCOUNTRATE]
+           ,[FDISCOUNT]
+           ,[FBEFBILLDISAMT]
+           ,[FBEFBILLDISALLAMT]
+           ,[FBILLCOSTAPPORTION]
+           ,[FBILLDISAPPORTION]
+           ,[FTAXNETPRICE]
+           ,[FAMOUNT]
+           ,[FAMOUNT_LC]
+           ,[FTAXAMOUNT]
+           ,[FTAXAMOUNT_LC]
+           ,[FALLAMOUNT]
+           ,[FALLAMOUNT_LC]
+           ,[FISFREE]
+           ,[FTAXCOMBINATION]
+           ,[FPRICEBASEQTY]
+           ,[FSALBASENUM]
+           ,[FSTOCKBASEDEN]
+           ,[FSRCBIZUNITID])
+     VALUES
+           (1878852
+,1100013
+,106017
+,5
+,1148
+,1148
+,0
+,1
+,1148
+,1148
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,0
+,1148
+,5740
+,5740
+,0
+,0
+,5740
+,5740
+,0
+,0
+,5
+,0
+,0
+,0)
+
+
+INSERT INTO [T_SAL_DELIVERYNOTICEFIN]
+           ([FENTRYID]
+           ,[FID]
+           ,[FFINDATE]
+           ,[FRECEIPTORGID]
+           ,[FSETTLEORGID]
+           ,[FSETTLETYPEID]
+           ,[FSETTLECURRID]
+           ,[FRECEIPTADVANCERATE]
+           ,[FRECEIPTADVANCEAMT]
+           ,[FLOCALCURRID]
+           ,[FEXCHANGETYPEID]
+           ,[FEXCHANGERATE]
+           ,[FPRICELISTID]
+           ,[FDISCOUNTLISTID]
+           ,[FBILLCOST]
+           ,[FBILLDISCOUNT]
+           ,[FBILLDISCOUNTRATE]
+           ,[FBILLTAXAMOUNT]
+           ,[FBILLTAXAMOUNT_LC]
+           ,[FBILLAMOUNT]
+           ,[FBILLAMOUNT_LC]
+           ,[FBILLALLAMOUNT]
+           ,[FBILLALLAMOUNT_LC]
+           ,[FRECEIPTCONDITIONID]
+           ,[FISINCLUDEDTAX]
+           ,[FCRECHKSTATUS]
+           ,[FCRECHKAMOUNT]
+           ,[FCRECHKDAYS])
+     VALUES
+           (1878852
+,1100013
+,'2016-11-18'
+,0
+,104772
+,0
+,1
+,0
+,0
+,1
+,2
+,1
+,154127
+,0
+,0
+,0
+,0
+,0
+,0
+,5740
+,5740
+,5740
+,5740
+,0
+,1
+,'A'
+,0
+,0)

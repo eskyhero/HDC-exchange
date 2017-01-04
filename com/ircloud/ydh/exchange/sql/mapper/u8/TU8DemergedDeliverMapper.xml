@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+        
+        
+<sqlMap namespace="U8DemergedDeliver">
+
+    <typeAlias alias="LogisticsDetail" type="com.ircloud.ydh.sdk4j.model.Logistics$LogisticsDetail"></typeAlias>
+    <typeAlias alias="Logistics" type="com.ircloud.ydh.sdk4j.model.Logistics"></typeAlias>
+    
+    <resultMap id="needDemergedSyncDeliver" class="Logistics">  
+      <result property="billNum" column="billNum" javaType="java.lang.String" />  
+      <result property="sendNumber" column="sendNumber" javaType="java.lang.String" />
+      <result property="deliverTime" column="sendDate" javaType="java.util.Date" />
+      
+      <result property="sendCompanyCode" column="sendCompanyCode" javaType="java.lang.String" />
+    </resultMap>  
+
+    <select id="needDemergedSyncDeliver" resultMap="needDemergedSyncDeliver">
+       select fbillNum as billNum,fsendNumber as sendNumber,fsendDate as sendDate,fsendCompanyCode as sendCompanyCode from t_sync_logistics where fstatus = '3'
+    </select>
+   
+</sqlMap>
+        
+

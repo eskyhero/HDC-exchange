@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="KisDemergedOutStorage">
+
+    <typeAlias alias="LogisticsDetail" type="com.ircloud.ydh.sdk4j.model.Logistics$LogisticsDetail"></typeAlias>
+    <typeAlias alias="Logistics" type="com.ircloud.ydh.sdk4j.model.Logistics"></typeAlias>
+    
+    
+    <resultMap id="findDemergedLogistics" class="Logistics">  
+      <result property="billNum" column="billNum" javaType="java.lang.String" />
+      <result property="orderNum" column="orderNum" javaType="java.lang.String" />
+      <result property="sendCompany" column="sendCompany" javaType="java.lang.String" />
+      <result property="sendCompanyCode" column="sendCompanyCode" javaType="java.lang.String" />
+      <result property="sendNumber" column="sendNumber" javaType="java.lang.String" />
+      <result property="logisticsDetail" column="billNum" select="TestDemergedOutStorage.findDemergedlogisticsDetail" javaType="java.util.List" />
+    </resultMap>
+    
+    <resultMap id="findOneTimeLogistics" class="Logistics">  
+      <result property="billNum" column="billNum" javaType="java.lang.String" />
+      <result property="orderNum" column="orderNum" javaType="java.lang.String" />
+      <result property="sendCompany" column="sendCompany" javaType="java.lang.String" />
+      <result property="sendCompanyCode" column="sendCompanyCode" javaType="java.lang.String" />
+      <result property="sendNumber" column="sendNumber" javaType="java.lang.String" />
+    </resultMap>
+    
+    <resultMap id="findLogisticsDetail" class="LogisticsDetail">
+      <result property="billNum" column="billNum" javaType="java.lang.String" /> 
+      <!-- <result property="lastProductId" column="productId" javaType="java.lang.String" /> -->
+      <result property="count" column="count" javaType="java.math.BigDecimal" />
+      <result property="productCode" column="productCode" javaType="java.lang.String" />
+    </resultMap>
+    
+    <select id="findDemergedLogisticses" resultClass="Logistics" resultMap="findDemergedLogistics" >
+       select fbillNum as billNum,forderNum as orderNum,fsendNumber as sendNumber,fsendDate as sendDate,fsendCompanyCode as sendCompanyCode,fsendCompany as sendCompany from t_sync_logistics where fstatus = '4'      <!-- 原来 ： 2 -->                 
+    </select>
+    
+    <select id="findDemergedlogisticsDetail" parameterClass="String" resultClass="LogisticsDetail" resultMap="findLogisticsDetail" >
+        select fbillNum as billNum,fcount as count,fproductCode as productCode from t_sync_logistics_detail where fbillNum = #billNum#
+    </select>
+    
+    <select id="findOneTimeLogisticses" resultMap="findOneTimeLogistics" >
+       select fbillNum as billNum,forderNum as orderNum,fsendNumber as sendNumber,fsendDate as sendDate,fsendCompanyCode as sendCompanyCode,fsendCompany as sendCompany from t_sync_logistics where fstatus = '5'       <!-- 原来 ： 1 -->  
+    </select>
+	
+</sqlMap>

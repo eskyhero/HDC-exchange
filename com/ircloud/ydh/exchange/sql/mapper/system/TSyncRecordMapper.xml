@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="SyncRecord">
+
+    <typeAlias alias="SyncRecord" type="com.ircloud.ydh.sdk4j.model.SyncRecord"/>
+    
+    <resultMap id="BaseResultMap" class="SyncRecord" >
+	   	<result column="fjobName"          property="jobName"         jdbcType="VARCHAR" />
+	    <result column="fmoduleId"         property="moduleId"        jdbcType="INTEGER" />
+	    <result column="ftotalCount"       property="totalCount"      jdbcType="INTEGER" />
+	    <result column="fsuccessCount"     property="successCount"    jdbcType="INTEGER" />
+	    <result column="ffailCount"        property="failCount"       jdbcType="INTEGER" />
+	    <result column="fstartTime"        property="startTime"       jdbcType="DATETIME" />
+	    <result column="fendTime"          property="endTime"         jdbcType="DATETIME" />
+	    <result column="fcreateTime"       property="createTime"      jdbcType="DATETIME" />
+	    <result column="fuserName"         property="userName"        jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <insert id="insertSyncRecord" parameterClass="SyncRecord">
+    	insert into YDH_Exchange.dbo.t_sync_record(fjobName,fmoduleId,ftotalCount,fsuccessCount,ffailCount,fstartTime,fendTime,fcreateTime,fuserName) 
+    	values(#jobName#,#moduleId#,#totalCount#,#successCount#,#failCount#,#startTime#,#endTime#,#createTime#,#userName#)
+    </insert>
+    
+    <update id="updateSyncRecord" parameterClass="SyncRecord">
+    	update YDH_Exchange.dbo.t_sync_record set 
+    	ftotalCount = #totalCount#,
+    	fsuccessCount = #successCount#,
+    	ffailCount = #failCount#,
+    	fstartTime = #startTime#,
+    	fendTime = #endTime#
+    	where 
+    	fjobName = #jobName#
+    </update>
+    
+</sqlMap>

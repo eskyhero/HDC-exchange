@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TestSaleBill">
+    <typeAlias alias="Order" type="com.ircloud.ydh.sdk4j.model.Order"/>
+    <typeAlias alias="OrderDetail" type="com.ircloud.ydh.sdk4j.model.OrderDetail"/>
+
+   <sql id="Base_Columns">
+    FID
+    ,FORDERNUM
+    ,FCUSTOMERID
+    ,FCUSTOMERNAME
+    ,FCUSTOMERTYPEID
+    ,FMONEY
+    ,FTYPE
+    ,FISDISCOUNTORDER 
+    ,FINVOCE
+    ,FCOUNTRYID
+    ,FPROVINCEID
+    ,FCITYID
+    ,FDISTRICTID
+    ,FADDRESS
+    ,FCONTACT
+    ,FPHONE
+    ,FMOBILE
+    ,FCREATETIME
+    ,FSTATUS
+    ,FCREATEID
+    ,fversion
+    ,finvoiceContent
+    ,finvoiceType
+    ,faudit
+    ,fdiscountMoney
+    ,foriginMoney
+    ,fdeliveryDate
+    ,ftaxation
+    ,ffreight
+    ,foutStorageStatus
+    ,fmodifyTime
+    ,fdeliverStatus
+    ,fsignStatus
+    ,foriginOrderNum
+    ,fweight
+    ,fweightUnit
+    ,fsubtractMoney
+  </sql>
+  
+  <sql id="Detail_Base_Columns">
+        FID
+        ,FORDERNUM
+        ,fproductId
+        ,fproductName
+        ,FORIGINALPRICE
+        ,Fprice
+        ,fcount
+        ,FMONEY
+        ,fdescription
+        ,fproductCode
+        ,fversion
+        ,funitName
+        ,fdiscountMoney
+        ,FproductRemark
+        ,FisGift
+        ,fproductImageUrl
+        ,FproductTypeId
+        ,fweight
+        ,fweightUnit
+        ,fbarCode
+  </sql>
+
+    <insert id="saveOrder" parameterClass="Order">
+        insert into t_sale_bill(<include refid="Base_Columns"/>)
+        values(
+        #id#,
+        #orderNum#,
+        #customer.id#,
+        #customer.name#,
+        #customer.customertypeId#,
+        #money#,
+        #type#,
+        #isDiscountOrder#,
+        #invoice#,
+        #countryId#,
+        #provinceId#,
+        #cityId#,
+        #districtId#,
+        #address#,
+        #contact#,
+        #phone#,
+        #mobile#,
+        #createTime#,
+        #status#,
+        #createId#,
+        #version#,
+        #invoiceContent#,
+        #invoiceType#,
+        #audit#,
+        #discountMoney#,
+        #originMoney#,
+        #deliveryDate#,
+        #taxation#,
+        #freight#,
+        #outStorageStatus#,
+        #modifyTime#,
+        #deliverStatus#,
+        #signStatus#,
+        #originOrderNum#,
+        #weight#,
+        #weightUnit#,
+        #subtractMoney#
+        )
+    </insert>
+    
+    <insert id="saveOrderDetail" parameterClass="OrderDetail">
+        insert into t_sale_bill_detail(<include refid="Detail_Base_Columns"/>)
+        values(
+        #id#
+        ,#orderNum#
+        ,#productId#
+        ,#productName#
+        ,#originPrice#
+        ,#price#
+        ,#count#
+        ,#money#
+        ,#description#
+        ,#productCode#
+        ,#version#
+        ,#unitName#
+        ,#discountMoney#
+        ,#productRemark#
+        ,#isGift#
+        ,#productImageUrl#
+        ,#productTypeId#
+        ,#weight#
+        ,#weightUnit#
+        ,#barCode#
+        )
+    </insert>
+
+	<insert id="saveReturnOrder" parameterClass="Order">
+        insert into t_sale_bill(<include refid="Base_Columns"/>)
+        values(
+        #id#,
+        #orderNum#,
+        #customer.id#,
+        #customer.name#,
+        #customer.customertypeId#,
+        #money#,
+        #type#,
+        #isDiscountOrder#,
+        #invoice#,
+        #countryId#,
+        #provinceId#,
+        #cityId#,
+        #districtId#,
+        #address#,
+        #contact#,
+        #phone#,
+        #mobile#,
+        #createTime#,
+        #status#,
+        #createId#,
+        #version#,
+        #invoiceContent#,
+        #invoiceType#,
+        #audit#,
+        #discountMoney#,
+        #originMoney#,
+        #deliveryDate#,
+        #taxation#,
+        #freight#,
+        #outStorageStatus#,
+        #modifyTime#,
+        #deliverStatus#,
+        #signStatus#,
+        #originOrderNum#,
+        #weight#,
+        #weightUnit#,
+        #subtractMoney#
+        )
+    </insert>
+
+	<insert id="saveReturnOrderDetail" parameterClass="OrderDetail">
+        insert into t_sale_bill_detail(<include refid="Detail_Base_Columns"/>)
+        values(
+        #id#
+        ,#orderNum#
+        ,#productId#
+        ,#productName#
+        ,#originPrice#
+        ,#price#
+        ,#count#
+        ,#money#
+        ,#description#
+        ,#productCode#
+        ,#version#
+        ,#unitName#
+        ,#discountMoney#
+        ,#productRemark#
+        ,#isGift#
+        ,#productImageUrl#
+        ,#productTypeId#
+        ,#weight#
+        ,#weightUnit#
+        ,#barCode#
+        )
+    </insert>
+    
+    <update id="deleteOrders" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill WHERE FORDERNUM in
+      <iterate conjunction="," open="(" close=")">
+         #list[].orderNum#
+      </iterate>
+    </update>   
+    
+    <update id="deleteOrderDetails" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill_detail WHERE FID in (select FID from t_sale_bill where FORDERNUM in
+	      <iterate conjunction="," open="(" close=")">
+	         #list[].orderNum#	         
+	      </iterate>
+	  )
+    </update>
+    
+	<update id="deleteReturnOrders" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill WHERE FORDERNUM in
+      <iterate conjunction="," open="(" close=")">
+         #list[].orderNum#
+      </iterate>
+    </update>   
+    
+    <update id="deleteReturnOrderDetails" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill_detail WHERE FID in (select FID from t_sale_bill where FORDERNUM in
+	      <iterate conjunction="," open="(" close=")">
+	         #list[].orderNum#	         
+	      </iterate>
+	  )
+    </update>
+    
+        <!-- 插入订单前执行存储过程 -->
+	<procedure id="excuteProcedureBeforeInsert" parameterClass="Order">
+	    CALL testPro
+	</procedure>
+	
+    <!-- 插入后执行存储过程 -->
+	<procedure id="excuteProcedure" parameterClass="Order">
+	    CALL testPro
+	</procedure>
+    
+    
+</sqlMap>

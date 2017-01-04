@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="U8Order">
+    <typeAlias alias="Order" type="com.ircloud.ydh.sdk4j.model.Order"/>
+    <typeAlias alias="OrderDetail" type="com.ircloud.ydh.sdk4j.model.OrderDetail"/>
+
+   <sql id="Base_Columns">
+    djbh,		
+	djbs,  
+	djlx,  
+	bendian,  
+	rq,  
+	dwbh,  
+	bezzs,  
+	kaiprq,  
+	ontime,  
+	piaohao,  
+	bm,  
+	ywy,  
+	username,
+	heth,
+	yuansph ,
+	zph,
+	kpman,
+	is_yckp,  
+	yishj,  
+	zhy,  
+	ywbmid,  
+	ywyid ,
+	beizhu,  
+	thfs,
+	fukuanfs,
+	dfywyid,
+	dfywy
+  </sql>
+
+
+	
+  <sql id="Detail_Base_Columns">
+
+djbh,
+	dj_sn,   
+	spid,
+	dj_sort,
+	xgdjbh,
+	recnum,
+	duiydjbh,
+	duiydj_cn,
+	dw,  
+	pihao,  
+	baozhiqi,  
+	jlgg,  
+	hw,  
+	baozhshl,  
+	lingsshl,  
+	shl,  
+	dj,  
+	hshj,  
+	koul,  
+	je,  
+	shlv,  
+	she,  
+	hsje,  
+	lshj,  
+	lshje, 
+	chbdj,
+	miejph,
+	beihy,
+	sxrq, 
+	ydj,
+	ndj,
+	songhr,
+	zengp,
+	pici, 
+	fapiaoh,
+	nhshj,
+	yhshj,
+	jiansh,
+	beizhu
+
+  </sql>
+  
+    <insert id="saveOrder" parameterClass="Order">
+     
+        insert into pf_djhz(<include refid="Base_Columns"/>)
+        values(
+<!--订单编号  -->	(select 'XSG'+'ZDA'+'YDH'+SUBSTRING(#orderNum#, 15,6)), 
+<!--单据标示  -->	'XSG',
+<!--单据类型  -->	N'212',
+<!--本店  -->		'ZDA',
+<!--日期  -->		(select CONVERT(char,#createTime#,23)),
+<!--客户ID  -->	isnull((select dwbh from mchk where danwbh=#customer.code#),'000000'),
+<!-- 是否增值税 -->	'',
+<!-- 开票日期 -->	(select CONVERT(char,#createTime#,23)),
+<!-- 开票时间 -->	(select CONVERT(char,#createTime#,108)),
+<!-- 票号 -->		'',
+<!-- 部门  -->		'集团采购部',
+<!-- 业务员  -->	'艾威',
+				'',
+				'',
+				'',
+				'',
+<!-- 操作员  -->	'系统管理员',
+<!-- 是否远程  -->	'否',
+<!-- 已上交  -->	'否',
+<!-- 摘要  -->		'销售票单',
+<!-- 业务部门ID-->	'DBM00000002',
+<!-- 业务员ID-->	'ZIY00000061',
+<!-- 备注 -->		#remark#,
+<!-- 提货方式  -->	'自送',
+<!-- 付款方式  -->	''
+<!-- 购销员内码  -->	
+<!-- 购销员 -->
+)
+
+ </insert>
+
+    
+ 
+    <insert id="saveOrderDetail" parameterClass="OrderDetail">
+ 
+        insert into pf_djmx(<include refid="Detail_Base_Columns"/>)
+        values(
+		(select 'XSG'+'ZDA'+'YDH'+SUBSTRING(#orderNum#, 15,6))
+	,	isnull((select (max(dj_sn)+1) from pf_djmx where djbh= 'XSG'+'ZDA'+'YDH'+SUBSTRING(#orderNum#, 15,6) ),1)
+	,	isnull((select spid from spkfk where spbh=#productCode# and beactive = '是'), '000000')
+	,	isnull((select (max(dj_sort)+1) from pf_djmx where djbh= 'XSG'+'ZDA'+'YDH'+SUBSTRING(#orderNum#, 15,6) ),1)
+	,	''
+	,	0
+	,	''
+	,	0
+	,	isnull((select dw from spkfk where spbh=#productCode# and beactive = '是'),'')
+	,	''
+	,	''
+	,	isnull((select jlgg from spkfk where spbh=#productCode# and beactive = '是'),'')
+	,	'HWI10000001'
+	,	0
+	,	0
+	,	#count#
+	,	#price#
+	,	(select #price#*(1+(select shlv from spkfk where spbh=#productCode# and beactive = '是')/100) )
+	,	100
+	,	#money#
+	,	17
+	,	(select #count#*(#price#*(select shlv from spkfk where spbh=#productCode# and beactive = '是')/100))
+	,	#money#
+	,	0
+	,	0
+	,	0
+	,	''
+	,	''
+	,	''
+	,	0
+	,	0
+	,	''
+	,	'否'
+	,	''
+	,	''
+	,	0
+	,	0
+	,	0
+	,	''
+	)
+
+    </insert>
+ 	
+ 
+<!--  
+    删除订货单
+    <delete id="deleteOrder" parameterClass="Order">    
+           delete from pf_djhz where djbh = 'XSG'+'ZDA'+'YDH'+SUBSTRING(#orderNum#, 15,6)
+    </delete>
+    
+    <delete id="deleteOrderDetail" parameterClass="Order">    
+         delete from pf_djmx where djbh = 'XSG'+'ZDA'+'YDH'+SUBSTRING(#orderNum#, 15,6)
+    </delete>
+    
+    删除退货单
+    <delete id="deleteReturnOrder" parameterClass="Order">    
+           
+    </delete>
+    
+    <delete id="deleteReturnOrderDetail" parameterClass="Order">    
+         
+    </delete> -->
+    
+    <!-- 保存退货单 -->
+ 	<insert id="saveReturnOrder" parameterClass="Order">
+ 	
+ 	</insert>
+ 	
+    <insert id="saveReturnOrderDetail" parameterClass="OrderDetail">
+          
+    </insert>
+    
+    <!-- 删除订货单 -->
+    <update id="deleteOrders" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill WHERE FORDERNUM in
+      <iterate conjunction="," open="(" close=")">
+         #list[].orderNum#
+      </iterate>
+    </update>   
+    
+    <update id="deleteOrderDetails" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill_detail WHERE FID in (select FID from t_sale_bill where FORDERNUM in
+	      <iterate conjunction="," open="(" close=")">
+	         #list[].orderNum#	         
+	      </iterate>
+	  )
+    </update>
+    <!-- 删除退货单 -->
+	<update id="deleteReturnOrders" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill WHERE FORDERNUM in
+      <iterate conjunction="," open="(" close=")">
+         #list[].orderNum#
+      </iterate>
+    </update>   
+    
+    <update id="deleteReturnOrderDetails" parameterClass="java.util.List">
+      DELETE FROM t_sale_bill_detail WHERE FID in (select FID from t_sale_bill where FORDERNUM in
+	      <iterate conjunction="," open="(" close=")">
+	         #list[].orderNum#	         
+	      </iterate>
+	  )
+    </update>
+    
+    
+    <!-- 存储过程参数定义 -->
+   <!--  <parameterMap class="java.util.Map" id="procedureMap">
+	  	<parameter property="orderNum" mode="IN" jdbcType="VARCHAR"/>
+	    <parameter property="resultStatus" mode="OUT" jdbcType="VARCHAR"/>
+	</parameterMap> -->
+
+    <!-- 执行存储过程 -->
+	<procedure id="excuteProcedure" parameterClass="java.util.Map">
+	    CALL insertParameter(#orderNum#)
+	</procedure>
+    
+    <resultMap id="findAllCancelOrder" class="Order">  
+      <result property="orderNum" column="orderNum" javaType="java.lang.String" />  
+    </resultMap>
+    
+    <select id="findAllCancelOrder" parameterClass="int" resultMap="findAllCancelOrder">
+       
+    </select>
+    
+</sqlMap>

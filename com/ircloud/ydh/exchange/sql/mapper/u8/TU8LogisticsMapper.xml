@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="U8Logistics">
+
+    <typeAlias alias="LogisticsDetail" type="com.ircloud.ydh.sdk4j.model.Logistics$LogisticsDetail"></typeAlias>
+    <typeAlias alias="Logistics" type="com.ircloud.ydh.sdk4j.model.Logistics"></typeAlias>
+    
+    
+    <resultMap id="findLogistics" class="Logistics">  
+      <result property="billNum" column="fbillNum" javaType="java.lang.String" />
+      <result property="orderNum" column="forderNum" javaType="java.lang.String" />  
+      <result property="customerId" column="fcustomerId" javaType="java.lang.String" />  
+      <result property="sendCompany" column="fsendCompany" javaType="java.lang.String" />  
+      <result property="sendCompanyName" column="fsendCompanyName" javaType="java.lang.String" />  
+      <result property="sendCompanyCode" column="fsendCompanyCode" javaType="java.lang.String" />  
+      <result property="sendNumber" column="fsendNumber" javaType="java.lang.String" />  
+      <result property="status" column="fstatus" javaType="java.lang.Integer" />  
+      <result property="createtime" column="fcreatetime" javaType="java.sql.Date" />  
+      <result property="contact" column="fcontact" javaType="java.lang.String" />
+      <result property="mobile" column="fmobile" javaType="java.lang.String" />
+      <result property="cityId" column="fcityId" javaType="java.lang.String" />
+      <result property="countryId" column="fcountryId" javaType="java.lang.String" />
+      <result property="districtId" column="fdistrictId" javaType="java.lang.String" />
+      <result property="provinceId" column="fprovinceId" javaType="java.lang.String" />
+      <result property="creatorName" column="fcreatorName" javaType="java.lang.String" />
+      <result property="createId" column="fcreateId" javaType="java.lang.String" />
+      <result property="signTime" column="fsignTime" javaType="java.lang.String" />
+      <result property="outStorageTime" column="foutStorageTime" javaType="java.lang.String" />
+      <result property="deliverTime" column="fdeliverTime" javaType="java.sql.Date" />
+      <result property="remark" column="fremark" javaType="java.lang.String" />
+      <result property="weight" column="fweight" javaType="java.lang.String" />
+      <result property="logisticsDetail" column="fbillNum" select="findDemergedLogisticsDetail" javaType="java.util.List" />
+    </resultMap>  
+    
+    <resultMap id="findLogisticsDetail" class="LogisticsDetail">  
+      <result property="billNum" column="fbillNum" javaType="java.lang.String" />  
+      <result property="lastProductId" column="flastProductId" javaType="java.lang.String" />
+      <result property="productNum" column="fproductNum" javaType="java.lang.String" />  
+      <result property="money" column="fmoney" javaType="java.math.BigDecimal" />  
+      <result property="count" column="fcount" javaType="java.math.BigDecimal" />  
+      <result property="price" column="fprice" javaType="java.math.BigDecimal" />
+      <result property="originPrice" column="fprice" javaType="java.math.BigDecimal" />
+      <result property="productCode" column="fproductCode" javaType="java.lang.String" />  
+      <result property="sendNumber" column="fsendNumber" javaType="java.lang.String" />  
+      <result property="status" column="fstatus" javaType="java.lang.Integer" />  
+      <result property="createtime" column="fcreatetime" javaType="java.sql.Date" />  
+      <result property="description" column="fdescription" javaType="java.lang.String" />
+      <result property="unitName" column="funitName" javaType="java.lang.String" />
+      <result property="productRemark" column="fproductRemark" javaType="java.lang.String" />
+      <result property="productImageUrl" column="fproductImageUrl" javaType="java.lang.String" />
+      <result property="productTypeId" column="fproductTypeId" javaType="java.lang.String" />
+      <result property="detailId" column="fdetailId" javaType="java.lang.String" />
+      <result property="isGift" column="fisGift" javaType="java.lang.Integer" />
+    </resultMap>
+    
+    
+    <select id="findDemergedLogisticses" resultClass="Logistics" resultMap="findLogistics">
+       select * from t_sync_logistics where foutstatus = '2'
+    </select>
+    
+    <select id="findDemergedlogisticsDetail" parameterClass="int" resultClass="LogisticsDetail" resultMap="findLogisticsDetail">
+       select * from t_sync_logistics_detail where fbillNum = #billNum# limit 0,#size#
+    </select>
+    
+    <select id="findOneTimeLogisticses" resultMap="findLogistics">
+       select * from t_sync_logistics where foutstatus = '1'
+    </select>
+
+</sqlMap>
